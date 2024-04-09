@@ -1,5 +1,5 @@
 const dbConfig = require('./dist/dbConfig/dbConfig');
-console.log(dbConfig.default)
+console.log(dbConfig.default);
 
 module.exports = {
   dev: {
