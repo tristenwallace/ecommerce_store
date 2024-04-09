@@ -1,17 +1,4 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
-
-// Create a new pool instance
-const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_NAME,
-});
+import { pool } from '../dbConfig/db';
 
 // Define the test suite
 describe('Database Connection', () => {
