@@ -13,7 +13,6 @@ describe('Database Connection', () => {
         console.log('Database connection successful:', res.rows[0]);
         expect(res.rows[0]).toBeDefined(); // Pass the test if there's a successful response
       }
-      pool.end(); // Close the pool
       done(); // Signal Jasmine that the asynchronous test is complete
     });
   });
