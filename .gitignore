@@ -1,0 +1,33 @@
+# Dependency directories
+node_modules/
+
+# Build output directory
+dist/
+
+# Environment configuration files
+.env
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional: Exclude specific environment files, if you have multiple (e.g., .env.production)
+# .env.production
+
+#Notes
+REQUIREMENTS.md
