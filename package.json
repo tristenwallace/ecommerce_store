@@ -6,12 +6,12 @@
   "scripts": {
     "start": "ts-node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "jasmine-ts",
     "build": "tsc",
     "lint": "eslint '*/**/*.ts' --quiet",
-    "format": "prettier --write '*/**/*.ts'",
-    "migrate:up": "db-migrate up --config database-config.js -e dev",
-    "migrate:down": "db-migrate down --config database-config.js -e dev"
+    "format": "prettier --write '**/*.{js,ts}'",
+    "migrate:up": "db-migrate up --config database-config.js",
+    "migrate:down": "db-migrate down --config database-config.js",
+    "test": "NODE_ENV=test jasmine-ts"
   },
   "author": "Udacity",
   "license": "ISC",

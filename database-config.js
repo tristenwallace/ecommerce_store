@@ -1,16 +1,13 @@
-// database-config.js
-require('dotenv').config();
+const dbConfig = require('./dbConfig');
+console.log(`NODE_ENV2: ${process.env.NODE_ENV}`);
 
-const databaseConfig = {
+module.exports = {
   dev: {
     driver: 'pg',
-    host: process.env.POSTGRES_HOST,
-    port: parseInt(process.env.POSTGRES_PORT, 10),
-    database: process.env.POSTGRES_NAME,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
+    ...dbConfig,
   },
-  // Add other environments like test, production, etc., as needed
+  test: {
+    driver: 'pg',
+    ...dbConfig,
+  },
 };
-
-module.exports = databaseConfig;
