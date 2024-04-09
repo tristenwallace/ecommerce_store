@@ -4,12 +4,12 @@ import bcrypt from 'bcrypt';
 
 const userModel = new UserModel();
 
-const clearUserTestData = async () => {
+export const clearUserTestData = async () => {
   await pool.query('DELETE FROM users');
 };
 
 // Helper function to create a user for testing
-const createUserForTest = async (): Promise<User> => {
+export const createUserForTest = async (): Promise<User> => {
   return userModel.create(
     'testusername',
     'testuser@testmail.com',

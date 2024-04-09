@@ -7,12 +7,12 @@ export interface Order {
 }
 
 export class OrderModel {
-  async getAll(): Promise<Order[]> {
+  async index(): Promise<Order[]> {
     const { rows } = await pool.query('SELECT * FROM orders');
     return rows;
   }
 
-  async getById(id: number): Promise<Order> {
+  async show(id: number): Promise<Order> {
     const { rows } = await pool.query('SELECT * FROM orders WHERE id = $1', [
       id,
     ]);
