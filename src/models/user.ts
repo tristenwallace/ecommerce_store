@@ -3,20 +3,20 @@ import bcrypt from 'bcrypt';
 
 export interface User {
   id: number;
-  first_name: string;
-  last_name: string;
+  username: string;
+  email: string;
   password: string; // This is the hashed password
 }
 
 export class UserModel {
   async create(
-    first_name: string,
-    last_name: string,
+    username: string,
+    email: string,
     password: string,
   ): Promise<User> {
     try {
       // Data validation (basic example)
-      if (!first_name || !last_name || !password) {
+      if (!username || !email || !password) {
         throw new Error('Missing required fields');
       }
 
@@ -24,8 +24,8 @@ export class UserModel {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
       const { rows } = await pool.query(
-        'INSERT INTO users (first_name, last_name, password) VALUES ($1, $2, $3) RETURNING id, first_name, last_name',
-        [first_name, last_name, hashedPassword],
+        'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
+        [username, email, hashedPassword],
       );
       return rows[0];
     } catch (error) {
@@ -53,10 +53,10 @@ export class UserModel {
     }
   }
 
-  async getAll(): Promise<User[]> {
+  async index(): Promise<User[]> {
     try {
       const { rows } = await pool.query(
-        'SELECT id, first_name, last_name FROM users',
+        'SELECT id, username, email FROM users',
       );
       return rows;
     } catch (error) {
@@ -65,10 +65,10 @@ export class UserModel {
     }
   }
 
-  async getById(id: number): Promise<User> {
+  async show(id: number): Promise<User> {
     try {
       const { rows } = await pool.query(
-        'SELECT id, first_name, last_name FROM users WHERE id = $1',
+        'SELECT id, username, email FROM users WHERE id = $1',
         [id],
       );
       if (rows.length === 0) {
@@ -84,7 +84,7 @@ export class UserModel {
   async delete(id: number): Promise<User> {
     try {
       const { rows } = await pool.query(
-        'DELETE FROM users WHERE id = $1 RETURNING id, first_name, last_name',
+        'DELETE FROM users WHERE id = $1 RETURNING id, username, email',
         [id],
       );
       if (rows.length === 0) {
@@ -99,8 +99,8 @@ export class UserModel {
 
   async update(
     id: number,
-    first_name?: string,
-    last_name?: string,
+    username?: string,
+    email?: string,
     password?: string,
   ): Promise<User> {
     try {
@@ -108,15 +108,15 @@ export class UserModel {
       const values = [];
       let count = 1;
 
-      if (first_name) {
-        query += `first_name = $${count}, `;
-        values.push(first_name);
+      if (username) {
+        query += `username = $${count}, `;
+        values.push(username);
         count++;
       }
 
-      if (last_name) {
-        query += `last_name = $${count}, `;
-        values.push(last_name);
+      if (email) {
+        query += `email = $${count}, `;
+        values.push(email);
         count++;
       }
 
@@ -129,7 +129,7 @@ export class UserModel {
 
       // Remove the trailing comma and space
       query = query.slice(0, -2);
-      query += ` WHERE id = $${count} RETURNING id, first_name, last_name`;
+      query += ` WHERE id = $${count} RETURNING id, username, email`;
 
       values.push(id);
 
