@@ -1,18 +1,7 @@
-import { Pool } from 'pg';
+import { pool } from '../dbConfig/db';
 import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
-const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT || '5432', 10),
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_NAME,
-});
-
-interface User {
+export interface User {
   id: number;
   first_name: string;
   last_name: string;

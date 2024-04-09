@@ -1,17 +1,6 @@
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import { pool } from '../dbConfig/db';
 
-dotenv.config();
-
-const pool = new Pool({
-  host: process.env.POSTGRES_HOST,
-  port: parseInt(process.env.POSTGRES_PORT || '5432', 10), // Default to 5432 if not specified
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_NAME,
-});
-
-interface Product {
+export interface Product {
   id: number;
   name: string;
   price: number;
@@ -19,12 +8,12 @@ interface Product {
 }
 
 export class ProductModel {
-  async getAll(): Promise<Product[]> {
+  async index(): Promise<Product[]> {
     const { rows } = await pool.query('SELECT * FROM products');
     return rows;
   }
 
-  async getById(id: number): Promise<Product> {
+  async show(id: number): Promise<Product> {
     const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [
       id,
     ]);
