@@ -56,7 +56,7 @@ export class ProductModel {
     name: string,
     price: number,
     category?: string,
-  ): Promise<any> {
+  ): Promise<Product> {
     const { rows } = await pool.query(
       'UPDATE products SET name = $2, price = $3, category = $4 WHERE id = $1 RETURNING *',
       [id, name, price, category],

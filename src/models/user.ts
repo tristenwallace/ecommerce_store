@@ -20,7 +20,11 @@ interface User {
 }
 
 export class UserModel {
-  async create(first_name: string, last_name: string, password: string): Promise<User> {
+  async create(
+    first_name: string,
+    last_name: string,
+    password: string,
+  ): Promise<User> {
     try {
       // Data validation (basic example)
       if (!first_name || !last_name || !password) {
@@ -32,7 +36,7 @@ export class UserModel {
 
       const { rows } = await pool.query(
         'INSERT INTO users (first_name, last_name, password) VALUES ($1, $2, $3) RETURNING id, first_name, last_name',
-        [first_name, last_name, hashedPassword]
+        [first_name, last_name, hashedPassword],
       );
       return rows[0];
     } catch (error) {
@@ -45,7 +49,7 @@ export class UserModel {
     try {
       const { rows } = await pool.query(
         'SELECT password FROM users WHERE id = $1',
-        [userId]
+        [userId],
       );
 
       if (rows.length) {
@@ -62,7 +66,9 @@ export class UserModel {
 
   async getAll(): Promise<User[]> {
     try {
-      const { rows } = await pool.query('SELECT id, first_name, last_name FROM users');
+      const { rows } = await pool.query(
+        'SELECT id, first_name, last_name FROM users',
+      );
       return rows;
     } catch (error) {
       console.error('Error retrieving all users:', error);
@@ -72,7 +78,10 @@ export class UserModel {
 
   async getById(id: number): Promise<User> {
     try {
-      const { rows } = await pool.query('SELECT id, first_name, last_name FROM users WHERE id = $1', [id]);
+      const { rows } = await pool.query(
+        'SELECT id, first_name, last_name FROM users WHERE id = $1',
+        [id],
+      );
       if (rows.length === 0) {
         throw new Error(`User not found with ID: ${id}`);
       }
@@ -83,10 +92,12 @@ export class UserModel {
     }
   }
 
-
   async delete(id: number): Promise<User> {
     try {
-      const { rows } = await pool.query('DELETE FROM users WHERE id = $1 RETURNING id, first_name, last_name', [id]);
+      const { rows } = await pool.query(
+        'DELETE FROM users WHERE id = $1 RETURNING id, first_name, last_name',
+        [id],
+      );
       if (rows.length === 0) {
         throw new Error(`User not found with ID: ${id}`);
       }
@@ -97,7 +108,12 @@ export class UserModel {
     }
   }
 
-  async update(id: number, first_name?: string, last_name?: string, password?: string): Promise<User> {
+  async update(
+    id: number,
+    first_name?: string,
+    last_name?: string,
+    password?: string,
+  ): Promise<User> {
     try {
       let query = 'UPDATE users SET ';
       const values = [];
@@ -138,5 +154,4 @@ export class UserModel {
       throw error;
     }
   }
-
 }
