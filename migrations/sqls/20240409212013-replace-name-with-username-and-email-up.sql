@@ -1,0 +1,5 @@
+ALTER TABLE users
+ADD COLUMN username TEXT NOT NULL,
+ADD COLUMN email TEXT NOT NULL,
+DROP COLUMN first_name,
+DROP COLUMN last_name;

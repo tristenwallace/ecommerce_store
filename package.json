@@ -9,8 +9,8 @@
     "build": "tsc",
     "lint": "eslint '*/**/*.ts' --quiet",
     "format": "prettier --write '**/*.{js,ts}'",
-    "migrate:up": "db-migrate up --config ./dbConfig/database-config.js",
-    "migrate:down": "db-migrate down --config ./dbConfig/database-config.js",
+    "migrate:up": "db-migrate up --config ./database-config.js",
+    "migrate:down": "db-migrate down --config ./database-config.js",
     "test": "NODE_ENV=test jasmine-ts"
   },
   "author": "Udacity",
