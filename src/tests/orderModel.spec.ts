@@ -5,13 +5,13 @@ import { createUserForTest, clearUserTestData } from './userModel.spec';
 const orderModel = new OrderModel();
 
 // Helper function to clear order test data from the database.
-const clearOrderTestData = async () => {
+export const clearOrderTestData = async () => {
   await pool.query('DELETE FROM orders');
 };
 
 // Helper function to create a test order in the database.
 // This simplifies the process of setting up test conditions.
-const createOrderForTest = async (
+export const createOrderForTest = async (
   userId: number,
   status: string,
 ): Promise<Order> => {
