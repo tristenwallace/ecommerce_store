@@ -4,45 +4,46 @@ import { pool } from '../dbConfig/db';
 const productModel = new ProductModel();
 
 /**
- * Clears all product data from the database.
- * This helps ensure a clean state for each test run.
+ * Function to clear all product data from the database.
+ * This ensures that each test starts with a clean database state.
  */
-const clearTestData = async () => {
+export const clearProductTestData = async () => {
   await pool.query('DELETE FROM products');
 };
 
+/**
+ * Helper function to create a product for testing purposes.
+ * @returns A Promise that resolves to the created Product object.
+ */
+export const createProductForTest = async (): Promise<Product> => {
+  return productModel.create('Test Product', 9.99, 'Test Category');
+};
+
 describe('Product Model', () => {
-  let createdProduct: Product; // Holds the product created in beforeEach for use in tests
+  let createdProduct: Product; // Variable to store the product created in beforeEach for use in tests
 
   beforeEach(async () => {
-    await clearTestData(); // Ensure a clean state before each test
-
-    // Create a new product to be used in subsequent tests
-    createdProduct = await productModel.create(
-      'Test Product',
-      9.99,
-      'Test Category',
-    );
+    await clearProductTestData(); // Clear product data before each test
+    createdProduct = await createProductForTest(); // Create a new product for use in subsequent tests
   });
 
   afterEach(async () => {
-    await clearTestData(); // Clean up after each test to maintain isolation
+    await clearProductTestData(); // Clean up product data after each test
   });
 
-  // Tests the functionality of the create method
+  // Test suite for the 'create' method of the ProductModel
   describe('Create method', () => {
     it('should add a product', async () => {
-      // Test product creation with specific attributes
       const result = await productModel.create(
         'Test Create Product',
         42.42,
         'Test Category',
       );
 
-      // Verify the created product has the expected attributes
+      // Verify that the product has the expected attributes
       expect(result).toEqual(
         jasmine.objectContaining({
-          id: jasmine.any(Number), // Expecting any number for ID
+          id: jasmine.any(Number),
           name: 'Test Create Product',
           price: 42.42,
           category: 'Test Category',
@@ -51,70 +52,60 @@ describe('Product Model', () => {
     });
   });
 
-  // Tests the functionality of the index method
+  // Test suite for the 'index' method of the ProductModel
   describe('Index method', () => {
     it('should return a list of products', async () => {
-      // Fetch all products
       const result = await productModel.index();
-      // Expect the result to be an array (list of products)
+
+      // Verify that the result is an array of products
       expect(result).toEqual(jasmine.any(Array));
     });
   });
 
-  // Tests the functionality of the show method
+  // Test suite for the 'show' method of the ProductModel
   describe('Show method', () => {
     it('should return the correct product by id', async () => {
-      expect(createdProduct).toBeDefined(); // Ensure a product was created successfully
-      expect(createdProduct.id).toBeDefined(); // Ensure the created product has a defined ID
-
-      // Fetch the product by its ID and verify it matches the created product
       const result = await productModel.show(createdProduct.id);
+
+      // Verify that the returned product matches the created product
       expect(result).toEqual(
-        jasmine.objectContaining({
-          id: createdProduct.id,
-        }),
+        jasmine.objectContaining({ id: createdProduct.id }),
       );
     });
   });
 
-  // Tests the functionality of the update method
+  // Test suite for the 'update' method of the ProductModel
   describe('Update method', () => {
     it('should update the product', async () => {
-      expect(createdProduct).toBeDefined(); // Ensure a product was created successfully
-      expect(createdProduct.id).toBeDefined(); // Ensure the created product has a defined ID
-
-      // Update the created product and verify the updated attributes
       const updatedProduct = await productModel.update(
         createdProduct.id,
         'Updated Product',
         42.42,
       );
+
+      // Verify that the product was updated with the new values
       expect(updatedProduct).toEqual(
         jasmine.objectContaining({
-          id: createdProduct.id, // The ID should remain the same
-          name: 'Updated Product', // The name should be updated
+          id: createdProduct.id,
+          name: 'Updated Product',
         }),
       );
     });
   });
 
-  // Tests the functionality of the delete method
+  // Test suite for the 'delete' method of the ProductModel
   describe('Delete method', () => {
     it('should remove the product', async () => {
-      expect(createdProduct).toBeDefined(); // Ensure a product was created successfully
-      expect(createdProduct.id).toBeDefined(); // Ensure the created product has a defined ID
-
-      // Delete the created product and verify it was removed
       const deletedProduct = await productModel.delete(createdProduct.id);
+
+      // Verify that the product was deleted
       expect(deletedProduct).toEqual(
-        jasmine.objectContaining({
-          id: createdProduct.id, // Verify the deleted product's ID
-        }),
+        jasmine.objectContaining({ id: createdProduct.id }),
       );
 
-      // Attempt to fetch the deleted product and confirm it no longer exists
+      // Verify that the product no longer exists in the database
       const result = await productModel.show(createdProduct.id);
-      expect(result).toBeUndefined(); // Expect the result to be undefined for a non-existent product
+      expect(result).toBeUndefined();
     });
   });
 });
