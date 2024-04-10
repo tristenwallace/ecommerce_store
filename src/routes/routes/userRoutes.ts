@@ -1,10 +1,19 @@
 import { Router } from 'express';
 import * as usersController from '../../controllers/usersController';
+import {
+  authenticateToken,
+  isAdmin,
+  isAdminOrCurrentUser,
+} from '../../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', usersController.index); // Get all users
-// router.post('/', usersController.create); // Create a new user
-// Add more routes as needed
+router.get('/', [authenticateToken, isAdmin], usersController.index);
+router.get(
+  '/:id',
+  [authenticateToken, isAdminOrCurrentUser],
+  usersController.show,
+);
+router.post('/', usersController.create);
 
 export default router;
