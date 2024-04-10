@@ -78,7 +78,7 @@ describe('OrderItem Model', () => {
       await createOrderItemForTest(order.id, product.id, 5);
 
       // Retrieve all order items and verify the result
-      const orderItems = await orderItemModel.getAll();
+      const orderItems = await orderItemModel.index();
       expect(Array.isArray(orderItems)).toBeTrue();
       expect(orderItems.length).toBeGreaterThanOrEqual(1);
     });
@@ -98,7 +98,7 @@ describe('OrderItem Model', () => {
       );
 
       // Retrieve the created order item by its ID and verify its properties
-      const foundOrderItem = await orderItemModel.getById(newOrderItem.id);
+      const foundOrderItem = await orderItemModel.show(newOrderItem.id);
       expect(foundOrderItem).toEqual(
         jasmine.objectContaining({
           id: newOrderItem.id,
@@ -157,8 +157,39 @@ describe('OrderItem Model', () => {
       expect(deletedOrderItem.id).toBe(orderItemToDelete.id);
 
       // Verify that the deleted order item no longer exists
-      const result = await orderItemModel.getById(orderItemToDelete.id);
+      const result = await orderItemModel.show(orderItemToDelete.id);
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getByOrderId method', () => {
+    it('should return all order items for a given order ID', async () => {
+      const user = await createUserForTest();
+      const order = await createOrderForTest(user.id, 'active');
+      const product = await createProductForTest();
+
+      // Create multiple order items for the order
+      await pool.query(
+        'INSERT INTO order_items (order_id, product_id, quantity) VALUES ($1, $2, $3)',
+        [order.id, product.id, 5],
+      );
+      await pool.query(
+        'INSERT INTO order_items (order_id, product_id, quantity) VALUES ($1, $2, $3)',
+        [order.id, product.id, 3],
+      );
+
+      const orderItems = await orderItemModel.getByOrderId(order.id);
+
+      expect(orderItems.length).toBeGreaterThanOrEqual(2);
+      orderItems.forEach((orderItem) => {
+        expect(orderItem.order_id).toEqual(order.id);
+      });
+    });
+
+    it('should return an empty array if no order items exist for the given order ID', async () => {
+      const nonExistingOrderId = 9999; // Assuming this ID does not exist
+      const orderItems = await orderItemModel.getByOrderId(nonExistingOrderId);
+      expect(orderItems).toEqual([]);
     });
   });
 });

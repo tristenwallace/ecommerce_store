@@ -8,12 +8,12 @@ export interface OrderItem {
 }
 
 export class OrderItemModel {
-  async getAll(): Promise<OrderItem[]> {
+  async index(): Promise<OrderItem[]> {
     const { rows } = await pool.query('SELECT * FROM order_items');
     return rows;
   }
 
-  async getById(id: number): Promise<OrderItem> {
+  async show(id: number): Promise<OrderItem> {
     const { rows } = await pool.query(
       'SELECT * FROM order_items WHERE id = $1',
       [id],
@@ -52,5 +52,11 @@ export class OrderItemModel {
       [id, order_id, product_id, quantity],
     );
     return rows[0];
+  }
+
+  async getByOrderId(orderId: number): Promise<OrderItem[]> {
+    const sql = 'SELECT * FROM order_items WHERE order_id = $1';
+    const result = await pool.query(sql, [orderId]);
+    return result.rows;
   }
 }

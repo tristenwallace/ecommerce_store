@@ -131,4 +131,52 @@ describe('Order Model', () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe('getCurrentOrderForUser method', () => {
+    let userId: number;
+
+    // Setup a user and multiple orders for that user before each test
+    beforeEach(async () => {
+      // Clear any existing data
+      await clearUserTestData();
+      await pool.query('DELETE FROM orders');
+
+      // Create a test user and get their ID
+      const user = await createUserForTest();
+      userId = user.id;
+
+      // Create multiple orders for the test user, including a 'completed' order and a non-completed 'active' order
+      await createOrderForTest(userId, 'completed');
+      await createOrderForTest(userId, 'active');
+      await createOrderForTest(userId, 'completed');
+    });
+
+    // Ensure database is clean after tests run
+    afterEach(async () => {
+      await pool.query('DELETE FROM orders');
+      await clearUserTestData();
+    });
+
+    it('should return the most recent non-completed order for a given user', async () => {
+      const currentOrder = await orderModel.getCurrentOrderForUser(userId);
+
+      // Expectations: The current order should exist and have a status other than 'completed'
+      expect(currentOrder).toBeDefined();
+      expect(currentOrder.status).not.toEqual('completed');
+      expect(currentOrder.user_id).toEqual(userId);
+    });
+
+    it('should return undefined if there is no current order for the user', async () => {
+      // Deleting non-completed orders to simulate no current order
+      await pool.query(
+        "DELETE FROM orders WHERE user_id = $1 AND status != 'completed'",
+        [userId],
+      );
+
+      const currentOrder = await orderModel.getCurrentOrderForUser(userId);
+
+      // Expectation: There should be no current order, so the result should be undefined
+      expect(currentOrder).toBeUndefined();
+    });
+  });
 });

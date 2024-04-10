@@ -42,4 +42,19 @@ export class OrderModel {
     );
     return rows[0];
   }
+
+  // Fetches the current order for a given user
+  async getCurrentOrderForUser(userId: number): Promise<Order> {
+    // Query to select the most recent order for the user that is not completed
+    const sql = `
+        SELECT * FROM orders 
+        WHERE user_id = $1 AND status != 'completed'
+        ORDER BY id DESC
+        LIMIT 1;
+      `;
+
+    const result = await pool.query(sql, [userId]);
+
+    return result.rows[0];
+  }
 }

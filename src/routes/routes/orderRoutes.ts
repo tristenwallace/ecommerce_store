@@ -1,10 +1,21 @@
 import { Router } from 'express';
 import * as ordersController from '../../controllers/ordersController';
+import {
+  authenticateToken,
+  isAdminOrCurrentUser,
+} from '../../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', ordersController.index); // Get all products
-//router.get('/current/:userId', ordersController.getCurrentOrder); // Get current order for a user
-// Add more routes as needed
+router.get(
+  '/current/:userId',
+  [authenticateToken, isAdminOrCurrentUser],
+  ordersController.getCurrentOrder,
+);
+router.post(
+  '/:userId',
+  [authenticateToken, isAdminOrCurrentUser],
+  ordersController.create,
+);
 
 export default router;
