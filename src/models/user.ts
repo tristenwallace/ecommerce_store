@@ -129,6 +129,27 @@ export class UserModel {
   }
 
   /**
+   * Retrieves a single user by their ID.
+   * @param id The ID of the user to retrieve.
+   * @returns The requested user object or an error if not found.
+   */
+  async getByUsername(username: string): Promise<User> {
+    try {
+      const { rows } = await pool.query(
+        'SELECT id, username, email, is_admin FROM users WHERE username = $1',
+        [username],
+      );
+      if (rows.length === 0) {
+        throw new Error(`User not found with username: ${username}`);
+      }
+      return rows[0];
+    } catch (error) {
+      console.error(`Error retrieving user with username ${username}:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Deletes a user from the database by their ID.
    * @param id The ID of the user to delete.
    * @returns The deleted user object or an error if not found.

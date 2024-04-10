@@ -7,10 +7,10 @@ const userModel = new UserModel();
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { id, password } = req.body;
+    const { username, password } = req.body;
 
     // Find the user by username
-    const user = await userModel.show(id);
+    const user = await userModel.getByUsername(username);
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password' });
@@ -29,7 +29,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, is_admin: user.is_admin },
+      { username: user.username, is_admin: user.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: '1h' },
     );

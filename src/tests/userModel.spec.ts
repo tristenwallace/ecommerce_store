@@ -120,6 +120,26 @@ describe('User Model', () => {
     });
   });
 
+  describe('getByUsername', () => {
+    it('should return the user with the given username', async () => {
+      // Setup: Create a user for testing retrieval by username
+      const newUser = await createUserForTest();
+
+      // Action: Retrieve the created user by their username
+      const foundUser = await userModel.getByUsername(newUser.username);
+
+      expect(foundUser).not.toBeUndefined();
+      expect(foundUser?.username).toBe('testusername');
+      // Add more assertions as needed to verify the returned user object
+    });
+
+    it('should throw an error for a non-existing username', async () => {
+      await expectAsync(
+        userModel.getByUsername('nonexistinguser'),
+      ).toBeRejectedWithError('User not found with username: nonexistinguser');
+    });
+  });
+
   describe('Update method', () => {
     it('should update user details', async () => {
       // Setup: Create a user for testing updates
