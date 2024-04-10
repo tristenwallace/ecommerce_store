@@ -17,3 +17,5 @@ app.use('/', routes);
 app.listen(PORT, function () {
   console.log(`starting app on: ${address}`);
 });
+
+export default app;
