@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import * as productsController from '../../controllers/productsController';
+import { authenticateToken, isAdmin } from '../../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', productsController.index); // Get all products
-//router.get('/:id', productsController.show); // Get a single product by ID
-//router.post('/', productsController.create); // Create a new product
-// Add more routes as needed
+router.get('/', productsController.index);
+router.get('/:id', productsController.show);
+router.post('/', [authenticateToken, isAdmin], productsController.create);
 
 export default router;
