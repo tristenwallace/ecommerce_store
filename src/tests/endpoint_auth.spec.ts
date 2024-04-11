@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../server';
-import { createUserForTest, clearUserTestData } from './userModel.spec';
+import { createUserForTest, clearUserTestData } from './model_user.spec';
 
 beforeEach(async () => {
   // Clears user data before each test for a clean testing environment

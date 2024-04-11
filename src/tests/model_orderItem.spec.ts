@@ -1,11 +1,11 @@
 import { OrderItem, OrderItemModel } from '../models/orderItem';
 import { pool } from '../dbConfig/db';
-import { createUserForTest, clearUserTestData } from './userModel.spec';
-import { createOrderForTest, clearOrderTestData } from './orderModel.spec';
+import { createUserForTest, clearUserTestData } from './model_user.spec';
+import { createOrderForTest, clearOrderTestData } from './model_order.spec';
 import {
   createProductForTest,
   clearProductTestData,
-} from './productModel.spec';
+} from './model_product.spec';
 
 const orderItemModel = new OrderItemModel();
 

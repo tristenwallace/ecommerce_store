@@ -1,6 +1,6 @@
 import { Order, OrderModel } from '../models/order';
 import { pool } from '../dbConfig/db';
-import { createUserForTest, clearUserTestData } from './userModel.spec';
+import { createUserForTest, clearUserTestData } from './model_user.spec';
 
 const orderModel = new OrderModel();
 
