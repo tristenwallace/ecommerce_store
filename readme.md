@@ -4,8 +4,8 @@ This project implements the backend for a storefront application using Node.js, 
 
 ## Prerequisites
 
-- Node.js
-- npm or yarn
+- Node.js (v.20.12.1)
+- npm or yarn (v.10.5.0)
 - PostgreSQL
 - Docker (optional)
 
@@ -20,7 +20,7 @@ cd storefront-backend
 
 2. Install dependencies: `npm install`
 
-3. Update .env variables in ./environment
+3. Update .env variables in ./environment by replacing the values if necessary and removing ".template" from the end of each file.
 
 4. Add .env file to root with `NODE_ENV=development`
 
@@ -44,16 +44,16 @@ If you prefer to use Docker to run PostgreSQL (docker setup is already provided)
 
 2. Navigate to the root directory of the project where the `docker-compose.yml` file is located.
 
-3. Run the following command to start the PostgreSQL containers in detached mode:
+3. Permissions: This setup includes an initialization script for PostgreSQL. Run the following from the root folder to ensure the script is executable:
+
+```
+chmod +x ./postgres-init/init-user-db.sh
+```
+
+4. Run the following command to start the PostgreSQL containers in detached mode:
 
 ```
 docker-compose up --build -d
-```
-
-4. Permissions: This setup includes an initialization script for PostgreSQL. Run the following from the root folder to ensure the script is executable:
-
-```
-chmod +x postgres-init/init-db.sh
 ```
 
 This grants the necessary permissions to execute the database initialization script when the PostgreSQL container starts.
@@ -62,8 +62,11 @@ This grants the necessary permissions to execute the database initialization scr
 
 After setting up your database environment and ensuring all configurations are in place, proceed to run database migrations to set up the required tables and schemas:
 
-- Setup dev db with `npm run migrate:up`
-- Setup test db with `NODE_ENV=test npm run migrate:up`
+1. Build distrubtion folder with `npm run build` (the migrations rely on a dbConfig.js file)
+
+2. Setup dev db with `npm run migrate:up`
+
+3. Setup test db with `NODE_ENV=test npm run migrate:up`
 
 These commands execute the migrations defined in the project, setting up your database schema according to the defined migrations.
 
