@@ -133,62 +133,69 @@ describe('User Model', () => {
       // Add more assertions as needed to verify the returned user object
     });
 
-    it('should throw an error for a non-existing username', async () => {
-      await expectAsync(
-        userModel.getByUsername('nonexistinguser'),
-      ).toBeRejectedWithError('User not found with username: nonexistinguser');
+    it('should throw an error for non-existing username', async () => {
+      try {
+        await userModel.getByUsername('nonexistinguser');
+        fail('Expected getByUsername to throw for non-existing username');
+      } catch (error) {
+        const errorMessage = (error as Error).message;
+        expect(errorMessage).toContain(
+          'User not found with username: nonexistinguser',
+        );
+      }
     });
   });
 
   describe('Update method', () => {
     it('should update user details', async () => {
-      // Setup: Create a user for testing updates
-      const newUser = await createUserForTest();
+      try {
+        const newUser = await createUserForTest();
+        const updatedUser = await userModel.update(
+          newUser.id,
+          'newusername',
+          'newuser@testmail.com',
+          'newpassword123',
+          false,
+          newUser.id,
+        );
 
-      // Action: Update the created user's details
-      const updatedUser = await userModel.update(
-        newUser.id,
-        'newusername',
-        'newuser@testmail.com',
-        'newpassword123',
-        false, // Updated admin status; in this case, maintaining non-admin status
-        newUser.id, // Passing the user's own ID as the "currentUserId" for authorization purposes
-      );
-
-      // Expectation: The updated user's details should match the new details provided
-      expect(updatedUser).toEqual(
-        jasmine.objectContaining({
-          username: 'newusername',
-          email: 'newuser@testmail.com',
-          is_admin: false, // Verify the updated admin status
-        }),
-      );
+        expect(updatedUser).toEqual(
+          jasmine.objectContaining({
+            username: 'newusername',
+            email: 'newuser@testmail.com',
+            is_admin: false,
+          }),
+        );
+      } catch (error) {
+        fail(`Unexpected error occurred: ${error}`);
+      }
     });
 
     it('should hash updated password', async () => {
-      // Setup: Create a user for testing password updates
-      const newUser = await createUserForTest();
+      try {
+        const newUser = await createUserForTest();
+        await userModel.update(
+          newUser.id,
+          undefined,
+          undefined,
+          'newpassword',
+          undefined,
+          newUser.id,
+        );
+        const { rows } = await pool.query(
+          'SELECT password FROM users WHERE id = $1',
+          [newUser.id],
+        );
+        const hashedPassword = rows[0].password;
+        const passwordMatch = await bcrypt.compare(
+          'newpassword',
+          hashedPassword,
+        );
 
-      // Action: Update the user's password
-      await userModel.update(
-        newUser.id,
-        undefined,
-        undefined,
-        'newpassword',
-        undefined,
-        newUser.id,
-      ); // Passing 'undefined' for optional parameters and the user's own ID for authorization
-
-      // Direct query to the database to fetch the updated hashed password
-      const { rows } = await pool.query(
-        'SELECT password FROM users WHERE id = $1',
-        [newUser.id],
-      );
-      const hashedPassword = rows[0].password;
-
-      // Verify that the updated password matches the new password when hashed
-      const passwordMatch = await bcrypt.compare('newpassword', hashedPassword);
-      expect(passwordMatch).toBeTrue();
+        expect(passwordMatch).toBeTrue();
+      } catch (error) {
+        fail(`Unexpected error occurred: ${error}`);
+      }
     });
   });
 

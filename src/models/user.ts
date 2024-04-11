@@ -123,7 +123,10 @@ export class UserModel {
       }
       return rows[0];
     } catch (error) {
-      console.error(`Error retrieving user with ID ${id}:`, error);
+      // Suppress log messages if running in test environment
+      if (process.env.NODE_ENV !== 'test') {
+        console.error(`Error retrieving user with ID ${id}:`, error);
+      }
       throw error;
     }
   }
@@ -144,7 +147,13 @@ export class UserModel {
       }
       return rows[0];
     } catch (error) {
-      console.error(`Error retrieving user with username ${username}:`, error);
+      // Suppress log messages if running in test environment
+      if (process.env.NODE_ENV !== 'test') {
+        console.error(
+          `Error retrieving user with username ${username}:`,
+          error,
+        );
+      }
       throw error;
     }
   }

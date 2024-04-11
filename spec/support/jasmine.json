@@ -4,7 +4,8 @@
     "../**/tests/*[s]pec.ts"
   ],
   "helpers": [
-    "helpers/**/*.js"
+    "helpers/**/*.js",
+    "spec/support/customReporter.js"
   ],
   "reporters": [
     {

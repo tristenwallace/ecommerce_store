@@ -24,20 +24,15 @@ export const login = async (req: Request, res: Response) => {
       throw error;
     }
 
-
     // Action: Verify the password for the created user
     const isValid = await userModel.verifyPassword(user.id, password);
 
-    console.log('Password valid:', isValid);
-
     if (!isValid) {
-      console.log('Invalid password');
       return res.status(401).json({ error: 'Invalid username or password' });
     }
 
     // Check for JWT_SECRET environment variable
     if (!process.env.JWT_SECRET) {
-      console.error('No JWT_SECRET found in environment');
       return res.status(500).json({ error: 'No JWT Key Available' });
     }
 
@@ -47,8 +42,6 @@ export const login = async (req: Request, res: Response) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' },
     );
-
-    console.log('JWT Token generated:', token);
 
     res.json({ token });
   } catch (error) {
