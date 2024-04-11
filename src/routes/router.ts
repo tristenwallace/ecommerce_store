@@ -15,4 +15,4 @@ routes.get('/', (req, res) => {
 routes.use('/products', productsRoutes);
 routes.use('/users', usersRoutes);
 routes.use('/orders', ordersRoutes);
-routes.use('/auth', authRoutes);
+routes.use('/login', authRoutes);

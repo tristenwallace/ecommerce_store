@@ -8,12 +8,12 @@ import {
 const router = Router();
 
 router.get(
-  '/current/:userId',
+  '/current/:username',
   [authenticateToken, isAdminOrCurrentUser],
   ordersController.getCurrentOrder,
 );
 router.post(
-  '/:userId',
+  '/:username',
   [authenticateToken, isAdminOrCurrentUser],
   ordersController.create,
 );

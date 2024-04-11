@@ -1,5 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request as ExpressRequest, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+
+// Extend the Express Request type with your custom properties
+interface Request extends ExpressRequest {
+  user?: {
+    id: number;
+    username: string;
+    is_admin: boolean;
+  };
+}
 
 export const authenticateToken = (
   req: Request,
