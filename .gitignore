@@ -29,6 +29,3 @@ yarn-error.log*
 # Optional: Exclude specific environment files, if you have multiple (e.g., .env.production)
 .env.development
 .env.test
-
-#Notes
-REQUIREMENTS.md

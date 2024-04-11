@@ -78,3 +78,5 @@ These commands execute the migrations defined in the project, setting up your da
 **Testing:**
 `npm run test`
 
+## API Overview
+View available routes and data shape [here](API_REQUIREMENTS)
