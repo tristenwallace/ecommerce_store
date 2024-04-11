@@ -15,14 +15,19 @@ This project implements the backend for a storefront application using Node.js, 
 
 ```
 git clone https://github.com/yourusername/storefront-backend.git
-cd storefront-backend
+cd ecommerce-store_backend
 ```
 
 2. Install dependencies: `npm install`
 
 3. Update .env variables in ./environment by replacing the values if necessary and removing ".template" from the end of each file.
 
-4. Add .env file to root with `NODE_ENV=development`
+4. Add .env file to root: 
+
+```
+NODE_ENV=development
+JWT_SECRET=your_jwt_secret
+```
 
 ## Set up the Database
 
