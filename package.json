@@ -11,7 +11,7 @@
     "format": "prettier --write '**/*.{js,ts}'",
     "migrate:up": "db-migrate up --config ./database-config.js",
     "migrate:down": "db-migrate down --config ./database-config.js",
-    "test": "NODE_ENV=test node -r dotenv/config node_modules/.bin/jasmine-ts"
+    "test": "cross-env NODE_ENV=test node -r dotenv/config node_modules/.bin/jasmine-ts"
   },
   "author": "Udacity",
   "license": "ISC",
@@ -34,6 +34,7 @@
     "@types/pg": "^7.14.11",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

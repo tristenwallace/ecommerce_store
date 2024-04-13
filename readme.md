@@ -85,6 +85,7 @@ These commands execute the migrations defined in the project, setting up your da
 
 **Testing:**
 `npm run test`
+Prior to testing, make sure /dist is built with `npm run build` and test db is running from the steps under "Migrations". 
 
 ## API Overview
 View available routes and data shape [here](API_REQUIREMENTS)
