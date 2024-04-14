@@ -33,14 +33,6 @@ JWT_SECRET=your_jwt_secret
 
 Before running the application, you need to set up the databases for both development and testing environments. This project uses PostgreSQL as the database system.
 
-### Using PostgreSQL Directly
-
-If you have PostgreSQL installed locally on your system and prefer to use it directly:
-
-1. Ensure PostgreSQL is installed and running on your system. You can download it from [the official PostgreSQL website](https://www.postgresql.org/download/).
-
-2. Create two PostgreSQL databases: one for development and one for testing. You can do this using the PostgreSQL command line tool or a graphical tool like pgAdmin.
-
 ### Using Docker
 
 If you prefer to use Docker to run PostgreSQL (docker setup is already provided):
@@ -75,6 +67,16 @@ After setting up your database environment and ensuring all configurations are i
 
 These commands execute the migrations defined in the project, setting up your database schema according to the defined migrations.
 
+## Testing:
+
+Ensure the following steps above have been completed prior to testing:
+
+1. Setup the test db according to the steps above
+2. Add .env to root with `NODE_ENV=test` and `JWT_SECRET=token`
+`npm run test`
+
+Run tests with `npm run test`
+
 ## Start the application
 
 **For development:**
@@ -82,10 +84,6 @@ These commands execute the migrations defined in the project, setting up your da
 
 **To watch for changes:**
 `npm run watch`
-
-**Testing:**
-`npm run test`
-Prior to testing, make sure /dist is built with `npm run build` and test db is running from the steps under "Migrations". 
 
 ## API Overview
 View available routes and data shape [here](API_REQUIREMENTS)
